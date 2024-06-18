@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'conclusionNews',
     'news',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'news_portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templatse')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
