@@ -1,6 +1,6 @@
 {% extends 'flatpages/default.html' %}
 
-{% load custom_filters %}
+
 {% load custom_tags %}
 
 {% block title %}
@@ -9,8 +9,8 @@ Posts
 
 {% block content %}
     <h1>Все новости</h1>
-    <h1>Всего публикаций {{news|lenght}}</h1>
-    <h3>{{ time_now|date:'M d Y' }}</h3>
+    <h1>Всего публикаций {{news}}</h1>
+    <h3>{{ time_now|date:'d M Y' }}</h3>
     <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о свежих нововостях!" }} </h3>
     <hr>
     {% if posts %}
@@ -22,10 +22,12 @@ Posts
            </tr>
             {% for post in posts %}
            <tr>
-               <td>{{ post.name }}</td>
-               <td>{{ post.date_in }}</td>
+               <td>{{ post.title }}</td>
+               <td>{{ post.date_in|date:'d M Y' }}</td>
                <td>{{ post.text|truncatechars:20 }}</td>
            </tr>
+           {%endfor%}
+
        </table>
     {% else %}
        <h2>Новостей нет!</h2>

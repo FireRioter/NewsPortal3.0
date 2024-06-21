@@ -23,7 +23,8 @@ class Author(models.Model):
         self.save()
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
+
 
 
 class Post(models.Model):
@@ -35,7 +36,7 @@ class Post(models.Model):
         (news, "Новость"),
         (articles, "Статья")
     ]
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE,related_name='posts',)
     poste_type = models.CharField(max_length=2, default=news)
     date_in = models.DateTimeField(auto_now_add=True)
     category = models.ManyToManyField(Category, through="PostCategory")
@@ -44,7 +45,14 @@ class Post(models.Model):
     rating = models.IntegerField(default=0)
 
     def preview(self):
-        return f"{self.text[:124]}..."
+        text = self.text[:124]
+        if len(self.text)> 124:
+            text += '....'
+        return text
+
+    def __str__(self):
+        return self.title
+
 
     def like(self):
         self.rating += 1
