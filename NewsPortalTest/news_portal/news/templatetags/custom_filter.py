@@ -1,6 +1,7 @@
 from django import template
 
 
+
 register = template.Library()
 
 censor = ['террористической']
