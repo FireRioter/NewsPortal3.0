@@ -4,6 +4,9 @@ from .filters import PostFilter
 from .forms import PostForm
 from .models import Post, Comment, Category
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
+from django.urls import reverse
 
 
 class PostList(ListView):
@@ -112,3 +115,11 @@ class CommListView(ListView):  # класс для отобрпажения
     model = Comment
     template_name = 'flatpages/comm.html'
     context_object_name = 'cmts'
+
+class ProtectedView(TemplateView, LoginRequiredMixin):
+    form_class = PostForm
+    model = Post
+    template_name = 'edit.html'
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={'pk': self.object.pk})
