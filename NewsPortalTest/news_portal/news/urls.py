@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path,include
 from .views import (PostList, PostDetail, PostFilterView, create_post,
                     edit_post, delete_post)
+from django.contrib import admin
 
 
 urlpatterns = [
@@ -10,4 +11,6 @@ urlpatterns = [
    path('create/', create_post,name='Create post'),
    path('<int:pk>/edit/',edit_post, name='Update post'),
    path('<int:pk>/delete/', delete_post, name='Delete'),
+   path('admin/', admin.site.urls),
+   path('accounts/', include('allauth.urls')),
 ]

@@ -7,6 +7,9 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 class PostList(ListView):
@@ -110,8 +113,8 @@ def delete_post(request, pk):
     return render(request, 'flatpages/del_post.html',{'post':post})
 
 
-# Неиспользуемые классы ниже
-class CommListView(ListView):  # класс для отобрпажения
+
+class CommListView(ListView):
     model = Comment
     template_name = 'flatpages/comm.html'
     context_object_name = 'cmts'
@@ -123,3 +126,42 @@ class ProtectedView(TemplateView, LoginRequiredMixin):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.pk})
+
+    @login_required
+    def subscribe(request, pk):
+        user = request.user
+        category = Category.objects.get(pk=pk)
+        user.subscriptions.add(category)
+
+        context = {'category': category}
+        send_mail(
+            subject=f'{user.username}, вы подписались на категорию: {category}',
+            # имя клиента и дата записи будут в теме для удобства
+            message=f'{user.username}, вы подписались на категорию: {category}',
+            # сообщение с кратким описанием проблемы
+            from_email='nikita.solo@mail.ru',
+            # здесь указываете почту, с которой будете отправлять (об этом попозже)
+            recipient_list=[user.email, ]  # здесь список получателей. Например, секретарь, сам врач и т. д.
+        )
+
+        return render(request, 'subscription_notification.html', context=context)
+
+        return render(request, 'subscription_notification.html', {'category': category, 'message': message})
+
+    @login_required
+    def unsubscribe(request, pk):
+        user = request.user
+        category = Category.objects.get(pk=pk)
+        user.subscriptions.remove(category)
+        context = {'category': category}
+        send_mail(
+            subject=f'{user.username}, вы отписались от категории: {category}',
+
+            message=f'{user.username}, вы отписались от категории: {category}',
+
+            from_email='nikita.solo@mail.ru',
+
+            recipient_list=[user.email, ]
+        )
+
+        return render(request, 'unsubscription_notification.html', context=context)
