@@ -180,3 +180,9 @@ ADMINS = [
     # список всех админов в формате ('имя', 'их почта')
 ]
 SERVER_EMAIL = 'nikita.solo@mail.ru'
+
+CELERY_BROKER_URL = 'redis://:PY7xhCgdSZZz41Xb6sinZogbEUvyW5IZ@redis-11409.c259.us-central1-2.gce.redns.redis-cloud.com:11409'
+CELERY_RESULT_BACKEND = 'redis://:PY7xhCgdSZZz41Xb6sinZogbEUvyW5IZ@redis-11409.c259.us-central1-2.gce.redns.redis-cloud.com:11409'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

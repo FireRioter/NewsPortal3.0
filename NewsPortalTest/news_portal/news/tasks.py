@@ -11,7 +11,7 @@ from django.db.models.signals import post_save, m2m_changed, pre_init
 from .models import Post, PostCategory, SubscriptionsCategory, User
 
 
- @shared_task
+@shared_task
  #Реализовать рассылку уведомлений подписчикам после создания новости.
 def mailing():
     def send_notifications(preview, pk, title, subscribers):
@@ -36,8 +36,7 @@ def mailing():
     @receiver(m2m_changed, sender=PostCategory)
     def notify_about_new_post(sender, instance, **kwargs):
          if kwargs['action'] == 'post_add':
-             subscribers_emails = User.objects.filter(subscriptions__in=instance.categories.all()).values_list('email',
-                                                                                                               flat=True)
+             subscribers_emails = User.objects.filter(subscriptions__in=instance.categories.all()).values_list('email',flat=True)
              print(subscribers_emails)
 
              send_notifications(instance.preview(), instance.pk, instance.title, subscribers_emails)
