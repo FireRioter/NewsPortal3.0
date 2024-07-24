@@ -13,33 +13,33 @@ from .models import Post, PostCategory, SubscriptionsCategory, User
 
 @shared_task
  #Реализовать рассылку уведомлений подписчикам после создания новости.
-def mailing():
-    def send_notifications(preview, pk, title, subscribers):
-        html_content = render_to_string(
-             'post_created_email.html',
-             {
-                 'text': preview,
-                 'link': f'{settings.SITE_URL}main/{pk}'
+def new_post(pk):
+    post = Post.objects.get(pk=pk)
+    categories = post.category.all()
+    title = post.title
+    preview = post.preview()
+    subscribers_emails = []
+    for category in categories:
+        subscribers = category.subscribers.all()
+        subscribers_emails += [s.email for s in subscribers]
 
-             }
-         )
-        msg = EmailMultiAlternatives(
-             subject=title,
-             body='',
-             from_email=settings.DEFAULT_FROM_EMAIL,
-             to=subscribers
-         )
+    html_content = render_to_string(
+        'post_created_email.html',
+        {
+            'text': preview,
+            'link': f'{settings.SITE_URL}/news/{pk}'
+        }
+    )
 
-        msg.attach_alternative(html_content, 'text/html')
-        msg.send()
+    msg = EmailMultiAlternatives(
+        subject=title,
+        body='',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=subscribers_emails,
+    )
 
-    @receiver(m2m_changed, sender=PostCategory)
-    def notify_about_new_post(sender, instance, **kwargs):
-         if kwargs['action'] == 'post_add':
-             subscribers_emails = User.objects.filter(subscriptions__in=instance.categories.all()).values_list('email',flat=True)
-             print(subscribers_emails)
-
-             send_notifications(instance.preview(), instance.pk, instance.title, subscribers_emails)
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
 
 @shared_task
 # Реализовать еженедельную рассылку с последними новостями (каждый понедельник в 8:00 утра)

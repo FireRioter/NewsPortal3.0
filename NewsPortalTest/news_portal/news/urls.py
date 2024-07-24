@@ -2,6 +2,7 @@ from django.urls import path,include
 from .views import (PostList, PostDetail, PostFilterView, create_post,
                     edit_post, delete_post)
 from django.contrib import admin
+from django.views.decorators.cache import cache_page
 
 
 urlpatterns = [
