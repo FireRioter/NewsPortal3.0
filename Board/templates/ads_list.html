@@ -1,0 +1,30 @@
+{% extends "flatpages/default.html" %}
+
+{% block content %}
+  <h1>Объявления</h1>
+  <ul>
+    {% for ad in ads %}
+      <li>
+        <a href="{% url 'ad_detail' ad.id %}">{{ ad.title }}</a> - {{ ad.created_at }}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="pagination">
+    <span class="step-links">
+        {% if ads.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ ads.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ ads.number }} of {{ ads.paginator.num_pages }}.
+        </span>
+
+        {% if ads.has_next %}
+            <a href="?page={{ ads.next_page_number }}">next</a>
+            <a href="?page={{ ads.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+  </div>
+{% endblock %}

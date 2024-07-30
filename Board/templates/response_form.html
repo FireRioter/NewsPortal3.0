@@ -1,0 +1,14 @@
+{% extends "flatpages/default.html" %}
+
+{% block content %}
+  <h1>Отклик на объявление: "{{ ad.title }}"</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_content">{{ form.content.label_tag }}</label>
+      {{ form.content }}
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить отклик</button>
+  </form>
+  <a href="{% url 'ad_detail' ad.id %}">Вернуться к объявлению</a>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}Доска объявлений{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Если используется Bootstrap, подключите его CSS здесь -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'ads_list' %}">Доска объявлений</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ads_list' %}">Объявления</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ad_create' %}">Создать объявление</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'newsletter' %}">Новостная рассылка</a>
+                     </li>
+                    <!-- Добавьте другие пункты меню здесь -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <!-- Добавьте другие скрипты здесь -->
+</body>
+</html>
