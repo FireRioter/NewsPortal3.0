@@ -1,0 +1,11 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+<h2>Здравствуй, username. Новая статья в твоём любимом разделе! "{{ category.news_category }}"</h2>
+
+<button> <a href="/main/"> Перейти на главную страницу </a> </button>
+{% endblock %}
